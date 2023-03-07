@@ -15,4 +15,6 @@
     <string name="_10_0">10.0</string>
     <string name="favorite_title">Favorite</string>
     <string name="share_title">share</string>
+    <string name="this_is_bottomsheetdialog">This is BottomSheetDialog</string>
+    <string name="share">Share</string>
 </resources>

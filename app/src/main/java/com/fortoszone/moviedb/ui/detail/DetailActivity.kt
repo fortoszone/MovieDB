@@ -2,6 +2,7 @@ package com.fortoszone.moviedb.ui.detail
 
 import FavoriteHelper
 import android.content.ContentValues
+import android.content.Intent
 import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
@@ -15,11 +16,14 @@ import com.fort0.githubuserapp.db.FavoriteContract
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ActivityDetailBinding
 import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.ui.favorite.FavoriteActivity
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private var isFavorite: Boolean = false
+    private lateinit var dialog: BottomSheetDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -61,6 +65,12 @@ class DetailActivity : AppCompatActivity() {
             }
         }
     }
+    private fun showBottomSheet() {
+        val dialogView = layoutInflater.inflate(R.layout.bottom_sheet, null)
+        dialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+        dialog.setContentView(dialogView)
+        dialog.show()
+    }
 
     companion object {
         const val EXTRA_DETAILS = "extra_details"
@@ -74,9 +84,7 @@ class DetailActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.share -> {
-//                Intent(this@DetailActivity, FavoriteActivity::class.java).apply {
-//                    startActivity(this)
-//                }
+                showBottomSheet()
                 true
             }
 
