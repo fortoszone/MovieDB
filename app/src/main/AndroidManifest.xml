@@ -29,6 +29,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <provider
+            android:name=".provider.FavoriteProvider"
+            android:authorities="com.fortoszone.moviedb"
+            android:exported="true"
+            android:enabled="true"
+            android:readPermission="com.fortoszone.moviedb.READ_DATABASE"
+            android:writePermission="com.fortoszone.moviedb.WRITE_DATABASE" />
+    </application>
 </manifest>

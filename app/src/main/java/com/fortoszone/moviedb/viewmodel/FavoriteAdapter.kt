@@ -38,7 +38,6 @@ class FavoriteAdapter(private val context: Context, var movies: ArrayList<Movie>
             binding.tvMovieReleaseDate.text = movie.releaseDate
             binding.tvMovieTitle.text = movie.name
 
-
             with(itemView) {
                 binding.imgMovie.setOnClickListener {
                     val moveActivity = Intent(itemView.context, DetailActivity::class.java)

@@ -19,7 +19,7 @@ data class Movie (
     var posterPath: String = "",
 
     @SerializedName("overview")
-    val overview: String = "",
+    var overview: String = "",
 
     @SerializedName("backdrop_path")
     var backdrop: String = ""

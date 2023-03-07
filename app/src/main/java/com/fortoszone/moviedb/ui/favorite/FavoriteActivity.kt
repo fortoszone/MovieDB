@@ -10,7 +10,9 @@ import android.os.HandlerThread
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.fort0.githubuserapp.db.FavoriteContract
+import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ActivityFavoriteBinding
 import com.fortoszone.moviedb.db.DatabaseMovie.UserColumns.Companion.CONTENT_URI
 import com.fortoszone.moviedb.model.Movie
@@ -18,16 +20,24 @@ import com.fortoszone.moviedb.viewmodel.FavoriteAdapter
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class FavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoriteBinding
     private lateinit var adapter: FavoriteAdapter
     private var movies: ArrayList<Movie> = arrayListOf()
+    private lateinit var rvFavoriteMovie: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val toolbar = supportActionBar
+        toolbar?.title = getString(R.string.favorite_title)
 
         val handlerThread = HandlerThread("DataObserver")
         handlerThread.start()
@@ -37,6 +47,8 @@ class FavoriteActivity : AppCompatActivity() {
             override fun onChange(self: Boolean) {
             }
         }
+
+        contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
 
         val favoriteHelper = FavoriteHelper(this)
         favoriteHelper.open()
@@ -55,9 +67,12 @@ class FavoriteActivity : AppCompatActivity() {
             }
         }
 
+        rvFavoriteMovie = binding.rvFavoriteMovie
+        rvFavoriteMovie.setHasFixedSize(true)
+        val adapter = FavoriteAdapter(this, movies)
+        binding.rvFavoriteMovie.adapter = adapter
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun loadFavoriteMovie() {
         val favoriteHelper = FavoriteHelper(this)
         val adapter = FavoriteAdapter(this, movies)
@@ -73,29 +88,43 @@ class FavoriteActivity : AppCompatActivity() {
             if (favoriteMovie.size > 0) {
                 adapter.movies = favoriteMovie
                 for (i in 0 until favoriteMovie.size) {
+                    Toast.makeText(this@FavoriteActivity, favoriteMovie[i].id, Toast.LENGTH_SHORT)
+                        .show()
                     getFavoriteMovie(favoriteMovie[i].id)
+
                 }
 
-                Toast.makeText(this@FavoriteActivity, "Favorite Count : ${favoriteMovie.size}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@FavoriteActivity,
+                    "Favorite Count : ${favoriteMovie.size}",
+                    Toast.LENGTH_SHORT
+                ).show()
 
             } else {
                 adapter.movies = ArrayList()
-                Toast.makeText(this@FavoriteActivity, "Favorite Count : 0", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FavoriteActivity, "Favorite Count : 0", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
+    }
+
+    private fun showRecyclerView() {
+        binding.rvFavoriteMovie.layoutManager = LinearLayoutManager(this)
+        val adapter = FavoriteAdapter(this, movies)
+        binding.rvFavoriteMovie.adapter = adapter
     }
 
     private fun getFavoriteMovie(id: String) {
         val client = AsyncHttpClient()
         val url =
-            "https://api.themoviedb.org/3/movie/$id?api_key=078e8fe79377bcac312b276a6f7ed8fa&language=en-US&page=1"
+            "https://api.themoviedb.org/3/movie/$id?api_key=078e8fe79377bcac312b276a6f7ed8fa"
         client.get(url, object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?
+                headers: Array<out Header>,
+                responseBody: ByteArray
             ) {
-                val response = String(responseBody!!)
+                val response = String(responseBody)
                 parseJsonData(response)
             }
 
@@ -105,11 +134,10 @@ class FavoriteActivity : AppCompatActivity() {
                 responseBody: ByteArray?,
                 error: Throwable?
             ) {
-                TODO("Not yet implemented")
+                Toast.makeText(this@FavoriteActivity, statusCode.toString(), Toast.LENGTH_SHORT)
+                    .show()
             }
-
         })
-
     }
 
     private fun parseJsonData(response: String) {
@@ -120,6 +148,9 @@ class FavoriteActivity : AppCompatActivity() {
             movie.id = jsonObject.getString("id")
             movie.posterPath = jsonObject.getString("poster_path")
             movie.name = jsonObject.getString("original_title")
+            movie.backdrop = jsonObject.getString("backdrop_path")
+            movie.releaseDate = jsonObject.getString("release_date")
+            movie.overview = jsonObject.getString("overview")
 
             movies.add(movie)
             showRecyclerView()
@@ -127,16 +158,7 @@ class FavoriteActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
             e.printStackTrace()
-
         }
-
-    }
-
-    private fun showRecyclerView() {
-        binding.rvFavoriteMovie.layoutManager = LinearLayoutManager(this)
-        val adapter = FavoriteAdapter(this, movies)
-        binding.rvFavoriteMovie.adapter = adapter
-
     }
 
     object MappingHelper {
@@ -150,15 +172,8 @@ class FavoriteActivity : AppCompatActivity() {
                     favoriteList.add(Movie(id = favoriteMovieId))
                 }
             }
-
             return favoriteList
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val adapter = FavoriteAdapter(this, movies)
-        outState.putParcelableArrayList(EXTRA_STATE, adapter.movies)
     }
 
     override fun onRestart() {
@@ -173,6 +188,12 @@ class FavoriteActivity : AppCompatActivity() {
         movies.clear()
         val favoriteHelper = FavoriteHelper(this)
         favoriteHelper.close()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val adapter = FavoriteAdapter(this, movies)
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.movies)
     }
 
     companion object {
