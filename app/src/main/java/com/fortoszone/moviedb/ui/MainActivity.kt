@@ -16,9 +16,6 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var popularMovieAdapter: PopularMovieAdapter
-    private lateinit var topRatedMovieAdapter: TopRatedMovieAdapter
-    private lateinit var nowPlayingMovieAdapter: NowPlayingMovieAdapter
     private lateinit var binding: ActivityMainBinding
     private lateinit var rvPopularMovie: RecyclerView
     private lateinit var rvTopRatedMovie: RecyclerView
@@ -62,19 +59,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadRecyclerView() {
         rvPopularMovie.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         loadPopularMovie { movies: List<Movie> ->
             rvPopularMovie.adapter = PopularMovieAdapter(movies)
         }
 
         rvTopRatedMovie.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         loadTopRatedMovies { movies: List<Movie> ->
             rvTopRatedMovie.adapter = TopRatedMovieAdapter(movies)
         }
 
         rvNowPlayingMovie.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         loadNowPlayingMovies { movies: List<Movie> ->
             rvNowPlayingMovie.adapter = NowPlayingMovieAdapter(movies)
         }

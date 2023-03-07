@@ -1,6 +1,7 @@
 package com.fortoszone.moviedb.viewmodel
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.MovieRowBinding
 import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.ui.detail.DetailActivity
 
 class NowPlayingMovieAdapter(private val movies: List<Movie>) :
     RecyclerView.Adapter<NowPlayingMovieAdapter.NowPlayingMovieViewHolder>() {
@@ -36,13 +38,13 @@ class NowPlayingMovieAdapter(private val movies: List<Movie>) :
             binding.tvMovieTitle.text = movie.name
             binding.tvMovieReleaseDate.text = movie.releaseDate
 
-//            with(itemView) {
-//                binding.user.setOnClickListener {
-//                    val moveActivity = Intent(itemView.context, DetailActivity::class.java)
-//                    moveActivity.putExtra(DetailActivity.EXTRA_DETAILS, user)
-//                    itemView.context.startActivity(moveActivity)
-//                }
-//            }
+            with(itemView) {
+                binding.cvMovie.setOnClickListener {
+                    val moveActivity = Intent(itemView.context, DetailActivity::class.java)
+                    moveActivity.putExtra(DetailActivity.EXTRA_DETAILS, movie)
+                    itemView.context.startActivity(moveActivity)
+                }
+            }
         }
     }
 }
