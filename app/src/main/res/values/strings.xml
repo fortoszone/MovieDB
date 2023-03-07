@@ -9,4 +9,8 @@
     <string name="description_title">Description</string>
     <string name="tv_movie_desc">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ac venenatis elit, at faucibus lectus. Etiam semper tristique elit, et posuere elit semper vitae. Ut facilisis arcu vitae lectus lobortis ultricies. Duis eu laoreet mi, et lobortis ex. Cras egestas odio at libero varius rhoncus. Vivamus mollis mauris urna, a mollis diam malesuada quis. Maecenas dapibus vel massa ac vulputate. Aenean rhoncus purus nec diam condimentum, quis tincidunt nunc mollis. Duis molestie iaculis nibh vitae scelerisque. Nam nisi enim, venenatis id molestie a, imperdiet tincidunt lacus. Sed augue nisl, mattis ut nisl at, fermentum convallis odio. Vivamus nec lorem sem.  "</string>
     <string name="movie_review_title">Review</string>
+    <string name="author_name">Author Name</string>
+    <string name="created_at">Created at </string>
+    <string name="movie_review_created_at">2014-04-10T20:09:40.500Z</string>
+    <string name="_10_0">10.0</string>
 </resources>

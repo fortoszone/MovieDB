@@ -60,18 +60,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/movie_review_title"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginBottom="6dp"/>
 
-            <TextView
-                android:id="@+id/tv_movie_review"
-                android:layout_width="wrap_content"
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_container_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tv_movie_desc" />
+                android:name="com.fortoszone.moviedb.ui.review.ReviewFragment" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
