@@ -1,18 +1,181 @@
 package com.fortoszone.moviedb.ui.favorite
 
-import androidx.appcompat.app.AppCompatActivity
+import FavoriteHelper
+import android.database.ContentObserver
+import android.database.Cursor
+import android.os.Build
 import android.os.Bundle
-import com.fortoszone.moviedb.R
+import android.os.Handler
+import android.os.HandlerThread
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.fort0.githubuserapp.db.FavoriteContract
 import com.fortoszone.moviedb.databinding.ActivityFavoriteBinding
-import com.fortoszone.moviedb.viewmodel.PopularMovieAdapter
+import com.fortoszone.moviedb.db.DatabaseMovie.UserColumns.Companion.CONTENT_URI
+import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.viewmodel.FavoriteAdapter
+import com.loopj.android.http.AsyncHttpClient
+import com.loopj.android.http.AsyncHttpResponseHandler
+import cz.msebera.android.httpclient.Header
+import kotlinx.coroutines.*
+import org.json.JSONObject
 
 class FavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoriteBinding
+    private lateinit var adapter: FavoriteAdapter
+    private var movies: ArrayList<Movie> = arrayListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavoriteBinding.inflate(layoutInflater)
 
+        val handlerThread = HandlerThread("DataObserver")
+        handlerThread.start()
+        val handler = Handler(handlerThread.looper)
+
+        val myObserver = object : ContentObserver(handler) {
+            override fun onChange(self: Boolean) {
+            }
+        }
+
+        val favoriteHelper = FavoriteHelper(this)
+        favoriteHelper.open()
+        if (savedInstanceState == null) {
+            loadFavoriteMovie()
+            contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
+
+        } else {
+            val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                savedInstanceState.getParcelableArrayList(EXTRA_STATE, Movie::class.java)
+            } else {
+                savedInstanceState.getParcelableArrayList<Movie>(EXTRA_STATE)
+            }
+            if (movie != null) {
+                adapter.movies = movie
+            }
+        }
+
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun loadFavoriteMovie() {
+        val favoriteHelper = FavoriteHelper(this)
+        val adapter = FavoriteAdapter(this, movies)
+        GlobalScope.launch(Dispatchers.Main) {
+            val deferredNotes = async(Dispatchers.IO) {
+                favoriteHelper.open()
+                val cursor = favoriteHelper.queryAll()
+                MappingHelper.mapCursorToArrayList(cursor)
+            }
 
+            val favoriteMovie = deferredNotes.await()
+
+            if (favoriteMovie.size > 0) {
+                adapter.movies = favoriteMovie
+                for (i in 0 until favoriteMovie.size) {
+                    getFavoriteMovie(favoriteMovie[i].id)
+                }
+
+                Toast.makeText(this@FavoriteActivity, "Favorite Count : ${favoriteMovie.size}", Toast.LENGTH_SHORT).show()
+
+            } else {
+                adapter.movies = ArrayList()
+                Toast.makeText(this@FavoriteActivity, "Favorite Count : 0", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun getFavoriteMovie(id: String) {
+        val client = AsyncHttpClient()
+        val url =
+            "https://api.themoviedb.org/3/movie/$id?api_key=078e8fe79377bcac312b276a6f7ed8fa&language=en-US&page=1"
+        client.get(url, object : AsyncHttpResponseHandler() {
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<out Header>?,
+                responseBody: ByteArray?
+            ) {
+                val response = String(responseBody!!)
+                parseJsonData(response)
+            }
+
+            override fun onFailure(
+                statusCode: Int,
+                headers: Array<out Header>?,
+                responseBody: ByteArray?,
+                error: Throwable?
+            ) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+    }
+
+    private fun parseJsonData(response: String) {
+        try {
+            val jsonObject = JSONObject(response)
+
+            val movie = Movie()
+            movie.id = jsonObject.getString("id")
+            movie.posterPath = jsonObject.getString("poster_path")
+            movie.name = jsonObject.getString("original_title")
+
+            movies.add(movie)
+            showRecyclerView()
+            contentResolver.notifyChange(CONTENT_URI, null)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+        }
+
+    }
+
+    private fun showRecyclerView() {
+        binding.rvFavoriteMovie.layoutManager = LinearLayoutManager(this)
+        val adapter = FavoriteAdapter(this, movies)
+        binding.rvFavoriteMovie.adapter = adapter
+
+    }
+
+    object MappingHelper {
+        fun mapCursorToArrayList(favCursor: Cursor?): ArrayList<Movie> {
+            val favoriteList = ArrayList<Movie>()
+
+            favCursor?.apply {
+                while (moveToNext()) {
+                    val favoriteMovieId =
+                        getString(getColumnIndexOrThrow(FavoriteContract.FavoriteColumns.COLUMN_NAME_ID))
+                    favoriteList.add(Movie(id = favoriteMovieId))
+                }
+            }
+
+            return favoriteList
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val adapter = FavoriteAdapter(this, movies)
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.movies)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        movies.clear()
+        loadFavoriteMovie()
+        contentResolver.notifyChange(CONTENT_URI, null)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        movies.clear()
+        val favoriteHelper = FavoriteHelper(this)
+        favoriteHelper.close()
+    }
+
+    companion object {
+        private const val EXTRA_STATE = "extra_state"
+    }
 }
