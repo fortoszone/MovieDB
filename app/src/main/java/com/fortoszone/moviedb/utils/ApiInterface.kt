@@ -2,6 +2,8 @@ package com.fortoszone.moviedb.utils
 
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiInterface {
     @GET("/3/movie/popular?api_key=078e8fe79377bcac312b276a6f7ed8fa")
@@ -13,7 +15,7 @@ interface ApiInterface {
     @GET("/3/movie/now_playing?api_key=078e8fe79377bcac312b276a6f7ed8fa")
     fun getNowPlaying(): Call<NowPlayingMovieResponse>
 
-    @GET("/3/movie/238/reviews?api_key=078e8fe79377bcac312b276a6f7ed8fa")
-    fun getReview(): Call<ReviewMovieResponse>
+    @GET("/3/movie/{id}/reviews?api_key=078e8fe79377bcac312b276a6f7ed8fa")
+    fun getReview(@Path("id") id: String): Call<ReviewMovieResponse>
 
 }

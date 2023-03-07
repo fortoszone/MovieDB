@@ -5,8 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ReviewMovieResponse(
     @SerializedName("results")
-    val reviews: List<Review>,
-
-    @SerializedName("author_details")
-    val authorDetails: List<Review>
+    val reviews: List<Review>
 )

@@ -1,19 +1,18 @@
 package com.fortoszone.moviedb.ui.detail
 
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ActivityDetailBinding
 import com.fortoszone.moviedb.model.Movie
-import com.fortoszone.moviedb.viewmodel.ReviewAdapter
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private lateinit var reviewAdapter: ReviewAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -38,5 +37,23 @@ class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DETAILS = "extra_details"
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.share -> {
+//                Intent(this@DetailActivity, FavoriteActivity::class.java).apply {
+//                    startActivity(this)
+//                }
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

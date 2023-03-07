@@ -1,12 +1,17 @@
 package com.fortoszone.moviedb.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ActivityMainBinding
 import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.ui.favorite.FavoriteActivity
 import com.fortoszone.moviedb.utils.*
 import com.fortoszone.moviedb.viewmodel.NowPlayingMovieAdapter
 import com.fortoszone.moviedb.viewmodel.PopularMovieAdapter
@@ -52,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<PopularMovieResponse>, t: Throwable) {
                     Toast.makeText(this@MainActivity, "An error has occured", Toast.LENGTH_LONG)
-                        .show();
+                        .show()
                 }
             })
     }
@@ -76,38 +81,57 @@ class MainActivity : AppCompatActivity() {
             rvNowPlayingMovie.adapter = NowPlayingMovieAdapter(movies)
         }
     }
+
+    private fun loadTopRatedMovies(callback: (List<Movie>) -> Unit) {
+        val apiService = ApiService.getInstance().create(ApiInterface::class.java)
+        apiService.getTopRated()
+            .enqueue(object : Callback<TopRatedMovieResponse> {
+                override fun onResponse(
+                    call: Call<TopRatedMovieResponse>,
+                    response: Response<TopRatedMovieResponse>
+                ) {
+                    return callback(response.body()!!.movies)
+                }
+
+                override fun onFailure(call: Call<TopRatedMovieResponse>, t: Throwable) {
+
+                }
+            })
+    }
+
+    private fun loadNowPlayingMovies(callback: (List<Movie>) -> Unit) {
+        val apiService = ApiService.getInstance().create(ApiInterface::class.java)
+        apiService.getNowPlaying()
+            .enqueue(object : Callback<NowPlayingMovieResponse> {
+                override fun onResponse(
+                    call: Call<NowPlayingMovieResponse>,
+                    response: Response<NowPlayingMovieResponse>
+                ) {
+                    return callback(response.body()!!.movies)
+                }
+
+                override fun onFailure(call: Call<NowPlayingMovieResponse>, t: Throwable) {
+
+                }
+            })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.favorite -> {
+                Intent(this@MainActivity, FavoriteActivity::class.java).apply {
+                    startActivity(this)
+                }
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
 
-private fun loadTopRatedMovies(callback: (List<Movie>) -> Unit) {
-    val apiService = ApiService.getInstance().create(ApiInterface::class.java)
-    apiService.getTopRated()
-        .enqueue(object : Callback<TopRatedMovieResponse> {
-            override fun onResponse(
-                call: Call<TopRatedMovieResponse>,
-                response: Response<TopRatedMovieResponse>
-            ) {
-                return callback(response.body()!!.movies)
-            }
-
-            override fun onFailure(call: Call<TopRatedMovieResponse>, t: Throwable) {
-
-            }
-        })
-}
-
-private fun loadNowPlayingMovies(callback: (List<Movie>) -> Unit) {
-    val apiService = ApiService.getInstance().create(ApiInterface::class.java)
-    apiService.getNowPlaying()
-        .enqueue(object : Callback<NowPlayingMovieResponse> {
-            override fun onResponse(
-                call: Call<NowPlayingMovieResponse>,
-                response: Response<NowPlayingMovieResponse>
-            ) {
-                return callback(response.body()!!.movies)
-            }
-
-            override fun onFailure(call: Call<NowPlayingMovieResponse>, t: Throwable) {
-
-            }
-        })
-}

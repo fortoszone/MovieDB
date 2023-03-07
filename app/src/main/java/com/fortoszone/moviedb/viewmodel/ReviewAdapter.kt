@@ -23,6 +23,7 @@ class ReviewAdapter(private val reviews: List<Review>) :
         position: Int
     ) {
         holder.bind(this.reviews[position])
+
     }
 
 
@@ -34,13 +35,10 @@ class ReviewAdapter(private val reviews: List<Review>) :
     inner class ReviewMovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ReviewRowBinding.bind(view)
         fun bind(review: Review) {
-            Glide.with(itemView).load(review.avatarPath)
-                .into(binding.imgReviewAuthor)
-            binding.tvReviewAuthor.text = review.author
-            binding.tvMovieRating.text = review.rating
+            binding.tvReviewAuthor.text = review.authorDetail.author
+            binding.tvMovieRating.text = review.authorDetail.rating
             binding.tvMovieReview.text = review.content
             binding.tvMovieReviewDate.text = review.createdAt
-            binding.tvMovieRating.text = review.rating
         }
     }
 }

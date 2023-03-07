@@ -9,21 +9,14 @@ data class Review(
     @SerializedName("id")
     var movieId: String = "",
 
-    @SerializedName("author")
-    var author: String = "",
-
-    @SerializedName("avatar_path")
-    var avatarPath: String = "",
-
-    @SerializedName("rating")
-    val rating: String = "",
+    @SerializedName("author_details")
+    val authorDetail: AuthorDetail,
 
     @SerializedName("content")
     var content: String = "",
 
     @SerializedName("created_at")
-    val createdAt: String = ""
+    val createdAt: String = "",
 
-) : Parcelable {
-    constructor() : this("", "", "", "", "", "")
-}
+
+) : Parcelable

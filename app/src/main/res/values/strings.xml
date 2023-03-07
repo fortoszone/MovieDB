@@ -13,4 +13,6 @@
     <string name="created_at">Created at </string>
     <string name="movie_review_created_at">2014-04-10T20:09:40.500Z</string>
     <string name="_10_0">10.0</string>
+    <string name="favorite_title">Favorite</string>
+    <string name="share_title">share</string>
 </resources>
