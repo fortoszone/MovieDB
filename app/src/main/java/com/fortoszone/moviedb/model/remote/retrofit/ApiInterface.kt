@@ -1,9 +1,12 @@
-package com.fortoszone.moviedb.utils
+package com.fortoszone.moviedb.model.remote.retrofit
 
+import com.fortoszone.moviedb.model.remote.response.NowPlayingMovieResponse
+import com.fortoszone.moviedb.model.remote.response.PopularMovieResponse
+import com.fortoszone.moviedb.model.remote.response.ReviewMovieResponse
+import com.fortoszone.moviedb.model.remote.response.TopRatedMovieResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface ApiInterface {
     @GET("/3/movie/popular?api_key=078e8fe79377bcac312b276a6f7ed8fa")

@@ -42,7 +42,7 @@ class DetailActivity : AppCompatActivity() {
             Glide.with(this).load("https://image.tmdb.org/t/p/w500" + movie.backdrop)
                 .into(binding.imgMovie)
         } else {
-            Toast.makeText(this, "Data belum masuk", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Data is not retrieved yet", Toast.LENGTH_SHORT).show()
         }
 
         checkIsFavorite()

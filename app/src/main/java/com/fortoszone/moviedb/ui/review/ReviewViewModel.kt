@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import com.fortoszone.moviedb.model.Movie
 import com.fortoszone.moviedb.model.Review
 import com.fortoszone.moviedb.ui.detail.DetailActivity
-import com.fortoszone.moviedb.utils.ApiInterface
-import com.fortoszone.moviedb.utils.ApiService
-import com.fortoszone.moviedb.utils.ReviewMovieResponse
+import com.fortoszone.moviedb.model.remote.retrofit.ApiInterface
+import com.fortoszone.moviedb.model.remote.retrofit.ApiService
+import com.fortoszone.moviedb.model.remote.response.ReviewMovieResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

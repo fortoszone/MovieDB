@@ -4,7 +4,11 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.fortoszone.moviedb.model.Movie
-import com.fortoszone.moviedb.utils.*
+import com.fortoszone.moviedb.model.remote.response.NowPlayingMovieResponse
+import com.fortoszone.moviedb.model.remote.response.PopularMovieResponse
+import com.fortoszone.moviedb.model.remote.response.TopRatedMovieResponse
+import com.fortoszone.moviedb.model.remote.retrofit.ApiInterface
+import com.fortoszone.moviedb.model.remote.retrofit.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

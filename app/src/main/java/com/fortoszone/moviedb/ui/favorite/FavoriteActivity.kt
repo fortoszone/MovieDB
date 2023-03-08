@@ -115,8 +115,6 @@ class FavoriteActivity : AppCompatActivity() {
             if (favoriteMovie.size > 0) {
                 adapter.movies = favoriteMovie
                 for (i in 0 until favoriteMovie.size) {
-                    Toast.makeText(context, favoriteMovie[i].id, Toast.LENGTH_SHORT)
-                        .show()
                     getFavoriteMovie(
                         context,
                         favoriteMovie[i].id
