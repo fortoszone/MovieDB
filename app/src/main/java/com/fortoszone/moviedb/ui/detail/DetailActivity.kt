@@ -1,8 +1,6 @@
 package com.fortoszone.moviedb.ui.detail
 
 import FavoriteHelper
-import android.content.ContentValues
-import android.content.Intent
 import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
@@ -16,7 +14,6 @@ import com.fort0.githubuserapp.db.FavoriteContract
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ActivityDetailBinding
 import com.fortoszone.moviedb.model.Movie
-import com.fortoszone.moviedb.ui.favorite.FavoriteActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
 
@@ -24,10 +21,13 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private var isFavorite: Boolean = false
     private lateinit var dialog: BottomSheetDialog
+    private lateinit var detailViewModel: DetailViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        detailViewModel = DetailViewModel()
 
         val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_DETAILS, Movie::class.java)
@@ -48,7 +48,8 @@ class DetailActivity : AppCompatActivity() {
         checkIsFavorite()
         binding.fabFavorites.setOnClickListener {
             if (!isFavorite) {
-                addToFavorite()
+                detailViewModel.addToFavorite(this, intent, applicationContext)
+                isFavorite = true
                 binding.fabFavorites.setImageDrawable(
                     ContextCompat.getDrawable(
                         this, R.drawable.baseline_favorite_24
@@ -56,7 +57,7 @@ class DetailActivity : AppCompatActivity() {
                 )
 
             } else {
-                removeFavorite()
+                detailViewModel.removeFavorite(this, intent, applicationContext)
                 binding.fabFavorites.setImageDrawable(
                     ContextCompat.getDrawable(
                         this, R.drawable.baseline_favorite_border_24
@@ -65,6 +66,7 @@ class DetailActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun showBottomSheet() {
         val dialogView = layoutInflater.inflate(R.layout.bottom_sheet, null)
         dialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
@@ -90,41 +92,6 @@ class DetailActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun addToFavorite() {
-        val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(EXTRA_DETAILS, Movie::class.java)
-        } else {
-            intent.getParcelableExtra<Movie>(EXTRA_DETAILS) as Movie
-        }
-        val favoriteHelper = FavoriteHelper(this)
-        val values = ContentValues()
-
-        favoriteHelper.getInstance(applicationContext)
-        favoriteHelper.open()
-        values.put(FavoriteContract.FavoriteColumns.COLUMN_NAME_ID, movie!!.id)
-        favoriteHelper.insert(values)
-        favoriteHelper.close()
-
-        Toast.makeText(this, "${movie.id} - added to favorite", Toast.LENGTH_SHORT).show()
-        isFavorite = true
-    }
-
-    private fun removeFavorite() {
-        val movie = intent.getParcelableExtra<Movie>(EXTRA_DETAILS) as Movie
-        val favoriteHelper = FavoriteHelper(this)
-        val values = ContentValues()
-
-        favoriteHelper.getInstance(applicationContext)
-        favoriteHelper.open()
-        favoriteHelper.deleteById(movie.id)
-        favoriteHelper.insert(values)
-        favoriteHelper.close()
-
-        Toast.makeText(this, "${movie.id} - removed from favorite", Toast.LENGTH_SHORT).show()
-        isFavorite = false
-
     }
 
     @OptIn(DelicateCoroutinesApi::class)

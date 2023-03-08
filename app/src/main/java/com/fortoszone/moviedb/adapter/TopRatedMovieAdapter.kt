@@ -1,6 +1,5 @@
-package com.fortoszone.moviedb.viewmodel
+package com.fortoszone.moviedb.adapter
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View

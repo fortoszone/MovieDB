@@ -1,10 +1,9 @@
-package com.fortoszone.moviedb.viewmodel
+package com.fortoszone.moviedb.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ReviewRowBinding
 import com.fortoszone.moviedb.model.Review

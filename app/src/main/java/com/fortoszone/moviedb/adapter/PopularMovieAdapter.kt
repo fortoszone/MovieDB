@@ -1,17 +1,15 @@
-package com.fortoszone.moviedb.viewmodel
+package com.fortoszone.moviedb.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.MovieRowPopularBinding
 import com.fortoszone.moviedb.model.Movie
 import com.fortoszone.moviedb.ui.detail.DetailActivity
-import com.fortoszone.moviedb.utils.PopularMovieResponse
 
 class PopularMovieAdapter(private val movies: List<Movie>) :
     RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
