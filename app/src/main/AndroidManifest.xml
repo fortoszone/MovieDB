@@ -8,12 +8,19 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/tmdb_logo_primary_full"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MovieDB"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.favorite.FavoriteActivity"
             android:exported="false" />
@@ -22,20 +29,15 @@
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
 
         <provider
             android:name=".provider.FavoriteProvider"
             android:authorities="com.fortoszone.moviedb"
-            android:exported="true"
             android:enabled="true"
+            android:exported="true"
             android:readPermission="com.fortoszone.moviedb.READ_DATABASE"
             android:writePermission="com.fortoszone.moviedb.WRITE_DATABASE" />
     </application>
+
 </manifest>

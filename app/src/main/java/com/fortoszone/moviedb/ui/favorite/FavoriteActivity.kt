@@ -119,7 +119,6 @@ class FavoriteActivity : AppCompatActivity() {
                         context,
                         favoriteMovie[i].id
                     )
-
                 }
 
                 Toast.makeText(

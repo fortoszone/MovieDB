@@ -17,4 +17,6 @@
     <string name="share_title">share</string>
     <string name="this_is_bottomsheetdialog">This is BottomSheetDialog</string>
     <string name="share">Share</string>
+    <string name="tmdb_primary_logo">TMDB Primary Logo</string>
+    <string name="created_by_owner">Created by fortoszone</string>
 </resources>
