@@ -1,5 +1,6 @@
 package com.fortoszone.moviedb.adapter
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -8,11 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.MovieRowPopularBinding
-import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.ui.detail.DetailActivity
 
 class PopularMovieAdapter(private val movies: List<Movie>) :
     RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
+
+    /*private var movies = mutableListOf<Movie>()
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setMovieList(movies: List<Movie>) {
+        this.movies.clear()
+        this.movies = movies.toMutableList()
+        notifyDataSetChanged()
+    }*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularMovieViewHolder {
         val view: View =

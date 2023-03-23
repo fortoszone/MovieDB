@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ReviewRowBinding
-import com.fortoszone.moviedb.model.Review
+import com.fortoszone.moviedb.model.local.entity.Review
 
 class ReviewAdapter(private val reviews: List<Review>) :
     RecyclerView.Adapter<ReviewAdapter.ReviewMovieViewHolder>() {

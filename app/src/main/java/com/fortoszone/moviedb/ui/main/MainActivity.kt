@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fortoszone.moviedb.R
@@ -12,15 +13,16 @@ import com.fortoszone.moviedb.adapter.NowPlayingMovieAdapter
 import com.fortoszone.moviedb.adapter.PopularMovieAdapter
 import com.fortoszone.moviedb.adapter.TopRatedMovieAdapter
 import com.fortoszone.moviedb.databinding.ActivityMainBinding
-import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.ui.favorite.FavoriteActivity
+import com.fortoszone.moviedb.utils.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var rvPopularMovie: RecyclerView
     private lateinit var rvTopRatedMovie: RecyclerView
     private lateinit var rvNowPlayingMovie: RecyclerView
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +34,10 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setDisplayUseLogoEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        mainViewModel = MainViewModel()
+        val factory = ViewModelFactory.getInstance(this)
+        viewModel = ViewModelProvider(
+            this, factory
+        )[MainViewModel::class.java]
 
         rvPopularMovie = binding.rvPopularMovie
         rvPopularMovie.setHasFixedSize(true)
@@ -50,19 +55,20 @@ class MainActivity : AppCompatActivity() {
     private fun loadRecyclerView() {
         rvPopularMovie.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        mainViewModel.loadPopularMovie(this) { movies: List<Movie> ->
+        rvTopRatedMovie.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvNowPlayingMovie.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        viewModel.loadPopularMovie() { movies: List<Movie> ->
             rvPopularMovie.adapter = PopularMovieAdapter(movies)
         }
 
-        rvTopRatedMovie.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        mainViewModel.loadTopRatedMovies(this) { movies: List<Movie> ->
+        viewModel.loadTopRatedMovies() { movies: List<Movie> ->
             rvTopRatedMovie.adapter = TopRatedMovieAdapter(movies)
         }
 
-        rvNowPlayingMovie.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        mainViewModel.loadNowPlayingMovies(this) { movies: List<Movie> ->
+        viewModel.loadNowPlayingMovies() { movies: List<Movie> ->
             rvNowPlayingMovie.adapter = NowPlayingMovieAdapter(movies)
         }
     }
@@ -80,9 +86,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
 }
-

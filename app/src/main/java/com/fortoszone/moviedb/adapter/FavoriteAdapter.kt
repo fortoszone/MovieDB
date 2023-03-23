@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.FavoriteRowBinding
-import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.ui.detail.DetailActivity
 
 class FavoriteAdapter(private val context: Context, var movies: ArrayList<Movie>) :

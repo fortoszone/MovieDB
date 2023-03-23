@@ -1,4 +1,4 @@
-package com.fortoszone.moviedb.model
+package com.fortoszone.moviedb.model.local.entity
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -16,7 +16,5 @@ data class Review(
     var content: String = "",
 
     @SerializedName("created_at")
-    val createdAt: String = "",
-
-
+    val createdAt: String = ""
 ) : Parcelable

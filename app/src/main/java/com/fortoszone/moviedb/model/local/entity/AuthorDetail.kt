@@ -1,4 +1,4 @@
-package com.fortoszone.moviedb.model
+package com.fortoszone.moviedb.model.local.entity
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -15,6 +15,4 @@ data class AuthorDetail(
     @SerializedName("rating")
     val rating: String = "",
 
-) : Parcelable {
-    constructor() : this("","")
-}
+) : Parcelable

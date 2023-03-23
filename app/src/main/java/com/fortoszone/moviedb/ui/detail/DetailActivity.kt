@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.fort0.githubuserapp.db.FavoriteContract
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ActivityDetailBinding
-import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.model.local.entity.Movie
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
 

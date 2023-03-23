@@ -1,5 +1,6 @@
 package com.fortoszone.moviedb.adapter
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.MovieRowBinding
-import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.ui.detail.DetailActivity
 
 class TopRatedMovieAdapter(private val movies: List<Movie>) :

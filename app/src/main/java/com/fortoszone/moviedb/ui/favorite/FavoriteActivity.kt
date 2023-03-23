@@ -17,7 +17,7 @@ import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.adapter.FavoriteAdapter
 import com.fortoszone.moviedb.databinding.ActivityFavoriteBinding
 import com.fortoszone.moviedb.db.DatabaseMovie.UserColumns.Companion.CONTENT_URI
-import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.model.local.entity.Movie
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header

@@ -8,7 +8,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.fort0.githubuserapp.db.FavoriteContract
-import com.fortoszone.moviedb.model.Movie
+import com.fortoszone.moviedb.model.local.entity.Movie
 
 class DetailViewModel : ViewModel() {
     fun addToFavorite(context: Context, intent: Intent, applicationContext: Context) {
