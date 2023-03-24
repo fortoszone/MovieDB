@@ -5,6 +5,13 @@
         android:id="@+id/favorite"
         android:icon="@drawable/baseline_favorite_24"
         android:title="@string/favorite_title"
-        app:showAsAction="always"
+        app:showAsAction="collapseActionView|ifRoom"
+        />
+
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="@string/settings_title"
+        app:showAsAction="collapseActionView|ifRoom"
         />
 </menu>

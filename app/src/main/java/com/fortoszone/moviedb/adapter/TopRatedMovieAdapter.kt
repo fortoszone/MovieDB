@@ -1,16 +1,19 @@
 package com.fortoszone.moviedb.adapter
 
-import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.MovieRowBinding
 import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.ui.detail.DetailActivity
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class TopRatedMovieAdapter(private val movies: List<Movie>) :
     RecyclerView.Adapter<TopRatedMovieAdapter.TopRatedMovieViewHolder>() {
@@ -35,8 +38,15 @@ class TopRatedMovieAdapter(private val movies: List<Movie>) :
         fun bind(movie: Movie) {
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + movie.posterPath)
                 .into(binding.imgMovie)
-            binding.tvMovieTitle.text = movie.name
-            binding.tvMovieReleaseDate.text = movie.releaseDate
+            binding.tvMovieTitle.text = movie.title
+
+            val timeFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            } else {
+                TODO("VERSION.SDK_INT < O")
+            }
+            val date = LocalDate.parse(movie.releaseDate, timeFormat)
+            binding.tvMovieReleaseDate.text = date.year.toString()
 
             with(itemView) {
                 binding.cvMovie.setOnClickListener {

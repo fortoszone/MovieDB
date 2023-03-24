@@ -10,7 +10,7 @@ data class Movie (
     var id: String = "",
 
     @SerializedName("title")
-    var name: String = "",
+    var title: String = "",
 
     @SerializedName("release_date")
     var releaseDate: String = "",

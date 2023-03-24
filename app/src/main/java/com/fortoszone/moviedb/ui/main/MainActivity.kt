@@ -15,6 +15,7 @@ import com.fortoszone.moviedb.adapter.TopRatedMovieAdapter
 import com.fortoszone.moviedb.databinding.ActivityMainBinding
 import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.ui.favorite.FavoriteActivity
+import com.fortoszone.moviedb.ui.settings.SettingsActivity
 import com.fortoszone.moviedb.utils.ViewModelFactory
 
 class MainActivity : AppCompatActivity() {
@@ -86,6 +87,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+
+            R.id.settings -> {
+                Intent(this@MainActivity, SettingsActivity::class.java).apply {
+                    startActivity(this)
+                }
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -1,6 +1,5 @@
 package com.fortoszone.moviedb.adapter
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -14,15 +13,6 @@ import com.fortoszone.moviedb.ui.detail.DetailActivity
 
 class PopularMovieAdapter(private val movies: List<Movie>) :
     RecyclerView.Adapter<PopularMovieAdapter.PopularMovieViewHolder>() {
-
-    /*private var movies = mutableListOf<Movie>()
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setMovieList(movies: List<Movie>) {
-        this.movies.clear()
-        this.movies = movies.toMutableList()
-        notifyDataSetChanged()
-    }*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PopularMovieViewHolder {
         val view: View =
@@ -43,6 +33,7 @@ class PopularMovieAdapter(private val movies: List<Movie>) :
         fun bind(movie: Movie) {
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + movie.backdrop)
                 .into(binding.imgMovie)
+            binding.tvMovieTitle.text = movie.title
 
 
             with(itemView) {

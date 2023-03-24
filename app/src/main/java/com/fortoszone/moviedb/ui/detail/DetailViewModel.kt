@@ -26,7 +26,7 @@ class DetailViewModel : ViewModel() {
         favoriteHelper.insert(values)
         favoriteHelper.close()
 
-        Toast.makeText(context, "${movie.name} added to favorite", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "${movie.title} added to favorite", Toast.LENGTH_SHORT).show()
     }
 
     fun removeFavorite(context: Context, intent: Intent, applicationContext: Context) {
@@ -40,6 +40,6 @@ class DetailViewModel : ViewModel() {
         favoriteHelper.insert(values)
         favoriteHelper.close()
 
-        Toast.makeText(context, "${movie.name} - removed from favorite", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "${movie.title} - removed from favorite", Toast.LENGTH_SHORT).show()
     }
 }

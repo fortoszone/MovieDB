@@ -40,6 +40,8 @@ class FavoriteActivity : AppCompatActivity() {
         val toolbar = supportActionBar
         toolbar?.title = getString(R.string.favorite_title)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val handlerThread = HandlerThread("DataObserver")
         handlerThread.start()
         val handler = Handler(handlerThread.looper)
@@ -187,7 +189,7 @@ class FavoriteActivity : AppCompatActivity() {
             val movie = Movie()
             movie.id = jsonObject.getString("id")
             movie.posterPath = jsonObject.getString("poster_path")
-            movie.name = jsonObject.getString("original_title")
+            movie.title = jsonObject.getString("original_title")
             movie.backdrop = jsonObject.getString("backdrop_path")
             movie.releaseDate = jsonObject.getString("release_date")
             movie.overview = jsonObject.getString("overview")

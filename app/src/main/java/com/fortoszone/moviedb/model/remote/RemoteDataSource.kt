@@ -98,11 +98,5 @@ class RemoteDataSource {
         fun getInstance(): RemoteDataSource = instance ?: synchronized(this) {
             instance ?: RemoteDataSource()
         }
-
-        private const val TAG = "RemoteData"
-    }
-
-    interface LoadMovieCallback {
-        fun movieReceived(movie: MovieResponse)
     }
 }

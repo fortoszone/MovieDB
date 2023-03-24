@@ -31,6 +31,7 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setLogo(R.drawable.tmdb_logo_alt_short)
         supportActionBar?.setDisplayUseLogoEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         detailViewModel = DetailViewModel()
 
@@ -41,7 +42,7 @@ class DetailActivity : AppCompatActivity() {
         }
 
         if (movie != null) {
-            binding.tvMovieTitle.text = movie.name
+            binding.tvMovieTitle.text = movie.title
             binding.tvMovieReleaseDate.text = movie.releaseDate
             binding.tvMovieDesc.text = movie.overview
             Glide.with(this).load("https://image.tmdb.org/t/p/w500" + movie.backdrop)

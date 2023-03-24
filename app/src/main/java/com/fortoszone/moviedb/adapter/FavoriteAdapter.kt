@@ -36,7 +36,7 @@ class FavoriteAdapter(private val context: Context, var movies: ArrayList<Movie>
                 .into(binding.imgMovie)
 
             binding.tvMovieReleaseDate.text = movie.releaseDate
-            binding.tvMovieTitle.text = movie.name
+            binding.tvMovieTitle.text = movie.title
 
             with(itemView) {
                 binding.movie.setOnClickListener {
