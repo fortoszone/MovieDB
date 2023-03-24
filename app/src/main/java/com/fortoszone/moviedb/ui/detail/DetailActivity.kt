@@ -1,7 +1,5 @@
 package com.fortoszone.moviedb.ui.detail
 
-import FavoriteHelper
-import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -9,19 +7,19 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.fort0.githubuserapp.db.FavoriteContract
 import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ActivityDetailBinding
 import com.fortoszone.moviedb.model.local.entity.Movie
+import com.fortoszone.moviedb.utils.ViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private var isFavorite: Boolean = false
     private lateinit var dialog: BottomSheetDialog
-    private lateinit var detailViewModel: DetailViewModel
+    private lateinit var viewModel: DetailViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -33,13 +31,18 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        detailViewModel = DetailViewModel()
+        val factory = ViewModelFactory.getInstance(this)
+        viewModel = ViewModelProvider(
+            this, factory
+        )[DetailViewModel::class.java]
 
         val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(EXTRA_DETAILS, Movie::class.java)
         } else {
             intent.getParcelableExtra<Movie>(EXTRA_DETAILS) as Movie
         }
+
+        checkMovieFavorite()
 
         if (movie != null) {
             binding.tvMovieTitle.text = movie.title
@@ -51,24 +54,26 @@ class DetailActivity : AppCompatActivity() {
             Toast.makeText(this, "Data is not retrieved yet", Toast.LENGTH_SHORT).show()
         }
 
-        checkIsFavorite()
         binding.fabFavorites.setOnClickListener {
-            if (!isFavorite) {
-                detailViewModel.addToFavorite(this, intent, applicationContext)
-                isFavorite = true
-                binding.fabFavorites.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this, R.drawable.baseline_favorite_24
+            if (movie != null) {
+                if (!movie.isFavorite) {
+                    viewModel.addMovieToFavorite(movie)
+                    Toast.makeText(this, "${movie.title} added to favorite", Toast.LENGTH_SHORT).show()
+                    binding.fabFavorites.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this, R.drawable.baseline_favorite_24
+                        )
                     )
-                )
 
-            } else {
-                detailViewModel.removeFavorite(this, intent, applicationContext)
-                binding.fabFavorites.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this, R.drawable.baseline_favorite_border_24
+                } else {
+                    viewModel.deleteMovieFromFavorite(movie.id)
+                    "${movie.title} removed to favorite"
+                    binding.fabFavorites.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this, R.drawable.baseline_favorite_border_24
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -100,55 +105,25 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun checkIsFavorite() {
-        val movie = intent.getParcelableExtra<Movie>(EXTRA_DETAILS) as Movie
-        val favoriteHelper = FavoriteHelper(this)
-
-        GlobalScope.launch(Dispatchers.Main) {
-            val deferredNotes = async(Dispatchers.IO) {
-                favoriteHelper.getInstance(applicationContext)
-                favoriteHelper.open()
-
-                val cursor = favoriteHelper.queryById(movie.id)
-                MappingHelper.mapCursorToObject(cursor)
-            }
-
-            val favPointer = deferredNotes.await()
-            if (favPointer.id == movie.id) {
-                binding.fabFavorites.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this@DetailActivity, R.drawable.baseline_favorite_24
-                    )
-                )
-                isFavorite = true
-
-
-            } else {
-                binding.fabFavorites.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        this@DetailActivity, R.drawable.baseline_favorite_border_24
-                    )
-                )
-                isFavorite = false
-            }
-            favoriteHelper.close()
-
+    private fun checkMovieFavorite() {
+        val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_DETAILS, Movie::class.java)
+        } else {
+            intent.getParcelableExtra<Movie>(EXTRA_DETAILS) as Movie
         }
-    }
 
-    object MappingHelper {
-        fun mapCursorToObject(favCursor: Cursor?): Movie {
-            var favoriteList = Movie()
-            favCursor?.apply {
-                if (favCursor.moveToFirst()) {
-                    val id =
-                        favCursor.getString(favCursor.getColumnIndexOrThrow(FavoriteContract.FavoriteColumns.COLUMN_NAME_ID))
-                    favoriteList = Movie(id = id)
-                    favCursor.close()
-                }
-            }
-            return favoriteList
+        if(movie!!.isFavorite) {
+            binding.fabFavorites.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this, R.drawable.baseline_favorite_border_24
+                )
+            )
+        } else {
+            binding.fabFavorites.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this, R.drawable.baseline_favorite_24
+                )
+            )
         }
     }
 }

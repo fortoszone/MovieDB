@@ -1,6 +1,6 @@
 package com.fortoszone.moviedb.adapter
 
-import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +12,10 @@ import com.fortoszone.moviedb.databinding.FavoriteRowBinding
 import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.ui.detail.DetailActivity
 
-class FavoriteAdapter(private val context: Context, var movies: ArrayList<Movie>) :
+class FavoriteAdapter() :
     RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
+
+    private var movies = emptyList<Movie>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteViewHolder {
         val view: View =
@@ -46,5 +48,11 @@ class FavoriteAdapter(private val context: Context, var movies: ArrayList<Movie>
                 }
             }
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setData(movie: List<Movie>) {
+        this.movies = movie
+        notifyDataSetChanged()
     }
 }
