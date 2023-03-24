@@ -6,9 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.ActivitySplashBinding
-import com.fortoszone.moviedb.ui.main.MainActivity
+import com.fortoszone.moviedb.ui.MainActivity
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {

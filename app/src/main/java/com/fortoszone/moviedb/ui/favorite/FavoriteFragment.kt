@@ -8,15 +8,17 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fort0.githubuserapp.db.FavoriteContract
-import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.adapter.FavoriteAdapter
-import com.fortoszone.moviedb.databinding.ActivityFavoriteBinding
-import com.fortoszone.moviedb.db.DatabaseMovie.UserColumns.Companion.CONTENT_URI
+import com.fortoszone.moviedb.databinding.FragmentFavoriteBinding
+import com.fortoszone.moviedb.db.DatabaseMovie
 import com.fortoszone.moviedb.model.local.entity.Movie
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
@@ -27,20 +29,16 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-class FavoriteActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityFavoriteBinding
-    private lateinit var adapter: FavoriteAdapter
+class FavoriteFragment : Fragment() {
+    private lateinit var binding: FragmentFavoriteBinding
     private var movies: ArrayList<Movie> = arrayListOf()
     private lateinit var rvFavoriteMovie: RecyclerView
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityFavoriteBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        val toolbar = supportActionBar
-        toolbar?.title = getString(R.string.favorite_title)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentFavoriteBinding.inflate(layoutInflater)
 
         val handlerThread = HandlerThread("DataObserver")
         handlerThread.start()
@@ -51,21 +49,33 @@ class FavoriteActivity : AppCompatActivity() {
             }
         }
 
-        contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
+        activity?.contentResolver?.registerContentObserver(
+            DatabaseMovie.UserColumns.CONTENT_URI,
+            true,
+            myObserver
+        )
 
-        val favoriteHelper = FavoriteHelper(this)
+        val favoriteHelper = FavoriteHelper(requireContext())
         favoriteHelper.open()
         if (savedInstanceState == null) {
-            loadFavoriteMovie(this)
-            contentResolver.registerContentObserver(CONTENT_URI, true, myObserver)
+            loadFavoriteMovie(requireContext())
+            activity?.contentResolver?.registerContentObserver(
+                DatabaseMovie.UserColumns.CONTENT_URI,
+                true,
+                myObserver
+            )
 
         } else {
             val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                savedInstanceState.getParcelableArrayList(EXTRA_STATE, Movie::class.java)
+                savedInstanceState.getParcelableArrayList(
+                    EXTRA_STATE,
+                    Movie::class.java
+                )
             } else {
-                savedInstanceState.getParcelableArrayList<Movie>(EXTRA_STATE)
+                savedInstanceState.getParcelableArrayList(EXTRA_STATE)
             }
             if (movie != null) {
+                val adapter = FavoriteAdapter(requireContext(), movies)
                 adapter.movies = movie
             }
         }
@@ -73,32 +83,34 @@ class FavoriteActivity : AppCompatActivity() {
         rvFavoriteMovie = binding.rvFavoriteMovie
         rvFavoriteMovie.setHasFixedSize(true)
         showRecyclerView()
-        contentResolver.notifyChange(CONTENT_URI, null)
+        activity?.contentResolver?.notifyChange(DatabaseMovie.UserColumns.CONTENT_URI, null)
+
+        return binding.root
     }
 
     private fun showRecyclerView() {
-        binding.rvFavoriteMovie.layoutManager = LinearLayoutManager(this)
-        val adapter = FavoriteAdapter(this, movies)
+        binding.rvFavoriteMovie.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = FavoriteAdapter(requireContext(), movies)
         binding.rvFavoriteMovie.adapter = adapter
     }
 
-    override fun onRestart() {
-        super.onRestart()
+    override fun onResume() {
+        super.onResume()
         movies.clear()
-        loadFavoriteMovie(this)
-        contentResolver.notifyChange(CONTENT_URI, null)
+        loadFavoriteMovie(requireContext())
+        activity?.contentResolver?.notifyChange(DatabaseMovie.UserColumns.CONTENT_URI, null)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         movies.clear()
-        val favoriteHelper = FavoriteHelper(this)
+        val favoriteHelper = FavoriteHelper(requireContext())
         favoriteHelper.close()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val adapter = FavoriteAdapter(this, movies)
+        val adapter = FavoriteAdapter(requireContext(), movies)
         outState.putParcelableArrayList(EXTRA_STATE, adapter.movies)
     }
 
@@ -196,7 +208,7 @@ class FavoriteActivity : AppCompatActivity() {
 
             movies.add(movie)
             showRecyclerView()
-            contentResolver.notifyChange(CONTENT_URI, null)
+            activity?.contentResolver?.notifyChange(DatabaseMovie.UserColumns.CONTENT_URI, null)
 
         } catch (e: Exception) {
             e.printStackTrace()
