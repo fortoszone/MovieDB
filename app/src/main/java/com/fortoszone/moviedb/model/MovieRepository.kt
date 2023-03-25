@@ -7,13 +7,22 @@ import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.model.local.entity.Review
 import com.fortoszone.moviedb.model.remote.RemoteDataSource
 
-class MovieRepository(private val remoteDataSource: RemoteDataSource, private val localDataSource: LocalDataSource) {
+class MovieRepository(
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
+) {
 
     val getFavoriteMovie: LiveData<List<Movie>> = localDataSource.getFavoriteMovie()
 
     fun addMovieToFavorite(movie: Movie) {
         localDataSource.addMovieToFavorite(movie)
     }
+
+    fun removeMovieFromFavorite(movie: Movie) {
+        localDataSource.removeMovieFromFavorite(movie)
+    }
+
+    fun checkMovieIsFavorite(id: String) : String = localDataSource.checkMovieIsFavorite(id)
 
     fun getPopularMovies(callback: (List<Movie>) -> Unit) =
         remoteDataSource.getPopularMovie(callback)

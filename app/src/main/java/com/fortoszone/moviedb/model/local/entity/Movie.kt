@@ -26,9 +26,7 @@ data class Movie (
     var overview: String = "",
 
     @SerializedName("backdrop_path")
-    var backdrop: String = "",
-
-    var isFavorite: Boolean = false
+    var backdrop: String = ""
 ) : Parcelable {
     constructor() : this("", "", "", "", "", "")
 }

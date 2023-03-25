@@ -9,9 +9,12 @@ interface MovieDao {
     @Query("SELECT * FROM movie_table")
     fun getFavoriteMovie(): LiveData<List<Movie>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMovieToFavorite(movie: Movie)
 
-    /*@Delete(onConflict = OnConflictStrategy.IGNORE)
-    fun removeMovieFromFavorite(id: String)*/
+    @Delete
+    fun removeMovieFromFavorite(movie: Movie)
+
+    @Query("SELECT count(*) FROM movie_table WHERE id = :id")
+    fun checkMovieIsFavorite(id: String) : String
 }

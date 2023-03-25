@@ -14,7 +14,10 @@ import com.fortoszone.moviedb.databinding.ActivityDetailBinding
 import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.utils.ViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
@@ -42,7 +45,7 @@ class DetailActivity : AppCompatActivity() {
             intent.getParcelableExtra<Movie>(EXTRA_DETAILS) as Movie
         }
 
-        checkMovieFavorite()
+//        checkMovieFavorite()
 
         if (movie != null) {
             binding.tvMovieTitle.text = movie.title
@@ -54,26 +57,39 @@ class DetailActivity : AppCompatActivity() {
             Toast.makeText(this, "Data is not retrieved yet", Toast.LENGTH_SHORT).show()
         }
 
-        binding.fabFavorites.setOnClickListener {
-            if (movie != null) {
-                if (!movie.isFavorite) {
-                    viewModel.addMovieToFavorite(movie)
-                    Toast.makeText(this, "${movie.title} added to favorite", Toast.LENGTH_SHORT).show()
-                    binding.fabFavorites.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            this, R.drawable.baseline_favorite_24
-                        )
-                    )
+        val id = movie!!.id
 
-                } else {
-                    viewModel.deleteMovieFromFavorite(movie.id)
-                    "${movie.title} removed to favorite"
+        var isCheck = false
+        CoroutineScope(Dispatchers.IO).launch {
+            val count = viewModel.checkMovieIsFavorite(id)
+            withContext(Dispatchers.Main) {
+                isCheck = if (count > 0.toString()) {
                     binding.fabFavorites.setImageDrawable(
                         ContextCompat.getDrawable(
-                            this, R.drawable.baseline_favorite_border_24
+                            this@DetailActivity, R.drawable.baseline_favorite_24
                         )
                     )
+                    true
+                } else {
+                    binding.fabFavorites.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this@DetailActivity, R.drawable.baseline_favorite_border_24
+                        )
+                    )
+                    false
                 }
+            }
+        }
+
+        binding.fabFavorites.setOnClickListener {
+            isCheck = !isCheck
+            if (isCheck) {
+                viewModel.addMovieToFavorite(movie)
+                Toast.makeText(this, "${movie.title} added to favorite", Toast.LENGTH_SHORT).show()
+            } else {
+                viewModel.deleteMovieFromFavorite(movie)
+                Toast.makeText(this, "${movie.title} removed from favorite", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
@@ -102,28 +118,6 @@ class DetailActivity : AppCompatActivity() {
             }
 
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun checkMovieFavorite() {
-        val movie = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(EXTRA_DETAILS, Movie::class.java)
-        } else {
-            intent.getParcelableExtra<Movie>(EXTRA_DETAILS) as Movie
-        }
-
-        if(movie!!.isFavorite) {
-            binding.fabFavorites.setImageDrawable(
-                ContextCompat.getDrawable(
-                    this, R.drawable.baseline_favorite_border_24
-                )
-            )
-        } else {
-            binding.fabFavorites.setImageDrawable(
-                ContextCompat.getDrawable(
-                    this, R.drawable.baseline_favorite_24
-                )
-            )
         }
     }
 }
