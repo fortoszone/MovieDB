@@ -1,11 +1,15 @@
 package com.fortoszone.moviedb.model.local.entity
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
+@Entity(tableName = "movie_table")
 @Parcelize
 data class Movie (
+    @PrimaryKey
     @SerializedName("id")
     var id: String = "",
 
