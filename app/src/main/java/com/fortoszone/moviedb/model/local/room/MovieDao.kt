@@ -16,5 +16,5 @@ interface MovieDao {
     suspend fun removeMovieFromFavorite(movie: Movie)
 
     @Query("SELECT count(*) FROM movie_table WHERE id = :id")
-    fun checkMovieIsFavorite(id: String) : String
+    fun checkMovieIsFavorite(id: String): String
 }
