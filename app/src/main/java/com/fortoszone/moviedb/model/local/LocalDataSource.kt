@@ -8,8 +8,8 @@ class LocalDataSource private constructor(
 ) {
     fun getFavoriteMovie() = movieDao.getFavoriteMovie()
 //    fun movieIsFavorite(id: String, isFavorite: Boolean) = movieDao.movieFavoriteState(id, isFavorite)
-    fun addMovieToFavorite(movie: Movie) = movieDao.addMovieToFavorite(movie)
-    fun removeMovieFromFavorite(movie: Movie) = movieDao.removeMovieFromFavorite(movie)
+    suspend fun addMovieToFavorite(movie: Movie) = movieDao.addMovieToFavorite(movie)
+    suspend fun removeMovieFromFavorite(movie: Movie) = movieDao.removeMovieFromFavorite(movie)
 
     fun checkMovieIsFavorite(id: String) : String = movieDao.checkMovieIsFavorite(id)
 

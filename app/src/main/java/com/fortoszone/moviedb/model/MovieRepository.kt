@@ -12,13 +12,13 @@ class MovieRepository(
     private val localDataSource: LocalDataSource
 ) {
 
-    val getFavoriteMovie: LiveData<List<Movie>> = localDataSource.getFavoriteMovie()
+    fun getFavoriteMovie(): LiveData<List<Movie>> = localDataSource.getFavoriteMovie()
 
-    fun addMovieToFavorite(movie: Movie) {
+    suspend fun addMovieToFavorite(movie: Movie) {
         localDataSource.addMovieToFavorite(movie)
     }
 
-    fun removeMovieFromFavorite(movie: Movie) {
+    suspend fun removeMovieFromFavorite(movie: Movie) {
         localDataSource.removeMovieFromFavorite(movie)
     }
 

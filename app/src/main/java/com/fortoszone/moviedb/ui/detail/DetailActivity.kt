@@ -60,24 +60,22 @@ class DetailActivity : AppCompatActivity() {
         val id = movie!!.id
 
         var isCheck = false
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Default).launch {
             val count = viewModel.checkMovieIsFavorite(id)
-            withContext(Dispatchers.Main) {
-                isCheck = if (count > 0.toString()) {
-                    binding.fabFavorites.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            this@DetailActivity, R.drawable.baseline_favorite_24
-                        )
+            isCheck = if (count > 0.toString()) {
+                binding.fabFavorites.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@DetailActivity, R.drawable.baseline_favorite_24
                     )
-                    true
-                } else {
-                    binding.fabFavorites.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            this@DetailActivity, R.drawable.baseline_favorite_border_24
-                        )
+                )
+                true
+            } else {
+                binding.fabFavorites.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@DetailActivity, R.drawable.baseline_favorite_border_24
                     )
-                    false
-                }
+                )
+                false
             }
         }
 
@@ -86,10 +84,20 @@ class DetailActivity : AppCompatActivity() {
             if (isCheck) {
                 viewModel.addMovieToFavorite(movie)
                 Toast.makeText(this, "${movie.title} added to favorite", Toast.LENGTH_SHORT).show()
+                binding.fabFavorites.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@DetailActivity, R.drawable.baseline_favorite_24
+                    )
+                )
             } else {
                 viewModel.deleteMovieFromFavorite(movie)
                 Toast.makeText(this, "${movie.title} removed from favorite", Toast.LENGTH_SHORT)
                     .show()
+                binding.fabFavorites.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@DetailActivity, R.drawable.baseline_favorite_border_24
+                    )
+                )
             }
         }
     }

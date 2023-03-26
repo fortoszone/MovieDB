@@ -49,9 +49,8 @@ class FavoriteAdapter() :
             }
         }
     }
-
-    @SuppressLint("NotifyDataSetChanged")
     fun setData(movie: List<Movie>) {
+        movie.isEmpty()
         this.movies = movie
         notifyDataSetChanged()
     }

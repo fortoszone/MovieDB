@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fortoszone.moviedb.adapter.FavoriteAdapter
 import com.fortoszone.moviedb.databinding.FragmentFavoriteBinding
-import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.utils.ViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class FavoriteFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteBinding
@@ -36,17 +38,22 @@ class FavoriteFragment : Fragment() {
             this, factory
         )[FavoriteViewModel::class.java]
 
-        viewModel.getFavoriteMovieList().observe(
-            viewLifecycleOwner
-        ) { movies -> adapter.setData(movies) }
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.getFavoriteMovieList().observe(
+                viewLifecycleOwner
+            ) { movies -> adapter.setData(movies) }
+        }
 
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.getFavoriteMovieList().observe(
-            viewLifecycleOwner
-        ) { movies -> adapter.setData(movies) }
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel.getFavoriteMovieList().observe(
+                viewLifecycleOwner
+            ) { movies -> adapter.setData(movies) }
+        }
     }
+
 }
