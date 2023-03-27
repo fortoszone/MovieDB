@@ -39,20 +39,15 @@ class NowPlayingMovieAdapter(private val movies: List<Movie>) :
                 .into(binding.imgMovie)
             binding.tvMovieTitle.text = movie.title
 
-            val timeFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val timeFormat =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd")
-            } else {
-                TODO("VERSION.SDK_INT < O")
-            }
             val date = LocalDate.parse(movie.releaseDate, timeFormat)
             binding.tvMovieReleaseDate.text = date.year.toString()
 
-            with(itemView) {
-                binding.cvMovie.setOnClickListener {
-                    val moveActivity = Intent(itemView.context, DetailActivity::class.java)
-                    moveActivity.putExtra(DetailActivity.EXTRA_DETAILS, movie)
-                    itemView.context.startActivity(moveActivity)
-                }
+            binding.cvMovie.setOnClickListener {
+                val moveActivity = Intent(itemView.context, DetailActivity::class.java)
+                moveActivity.putExtra(DetailActivity.EXTRA_DETAILS, movie)
+                itemView.context.startActivity(moveActivity)
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.fortoszone.moviedb.ui.home
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +44,11 @@ class HomeFragment : Fragment() {
         rvNowPlayingMovie = binding.rvNowPlayingMovie
         rvNowPlayingMovie.setHasFixedSize(true)
 
-        loadRecyclerView()
+        Handler(Looper.getMainLooper()).postDelayed({
+            loadRecyclerView()
+            binding.pbHome.visibility = View.INVISIBLE
+            binding.svHome.visibility = View.VISIBLE
+        }, 1000)
 
         return binding.root
     }
@@ -55,16 +61,23 @@ class HomeFragment : Fragment() {
         rvNowPlayingMovie.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
-        viewModel.loadPopularMovie() { movies: List<Movie> ->
+        viewModel.loadPopularMovie { movies: List<Movie> ->
             rvPopularMovie.adapter = PopularMovieAdapter(movies)
         }
 
-        viewModel.loadTopRatedMovies() { movies: List<Movie> ->
+        viewModel.loadTopRatedMovies { movies: List<Movie> ->
             rvTopRatedMovie.adapter = TopRatedMovieAdapter(movies)
         }
 
-        viewModel.loadNowPlayingMovies() { movies: List<Movie> ->
+        viewModel.loadNowPlayingMovies { movies: List<Movie> ->
             rvNowPlayingMovie.adapter = NowPlayingMovieAdapter(movies)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadRecyclerView()
+        binding.pbHome.visibility = View.INVISIBLE
+        binding.svHome.visibility = View.VISIBLE
     }
 }

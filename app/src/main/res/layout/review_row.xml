@@ -46,7 +46,8 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:src="@drawable/baseline_star_24"
-                        android:layout_marginEnd="2dp"/>
+                        android:layout_marginEnd="2dp"
+                        android:contentDescription="@string/rating_icon" />
 
                     <TextView
                         android:id="@+id/tv_movie_rating"

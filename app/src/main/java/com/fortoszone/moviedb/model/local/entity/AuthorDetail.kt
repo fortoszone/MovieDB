@@ -13,6 +13,6 @@ data class AuthorDetail(
     var avatarPath: String = "",
 
     @SerializedName("rating")
-    val rating: String = "",
+    var rating: Double? = null,
 
-) : Parcelable
+    ) : Parcelable

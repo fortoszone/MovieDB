@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.model.local.entity.Review
 import com.fortoszone.moviedb.model.remote.response.MovieResponse
-import com.fortoszone.moviedb.model.remote.response.ReviewMovieResponse
+import com.fortoszone.moviedb.model.remote.response.ReviewResponse
 import com.fortoszone.moviedb.model.remote.retrofit.MovieInterface
 import com.fortoszone.moviedb.model.remote.retrofit.MovieService
 import com.fortoszone.moviedb.ui.detail.DetailActivity
@@ -77,15 +77,15 @@ class RemoteDataSource {
         }
 
         val apiService = MovieService.getInstance().create(MovieInterface::class.java)
-        apiService.getReview(movie!!.id).enqueue(object : Callback<ReviewMovieResponse> {
+        apiService.getReview(movie!!.id).enqueue(object : Callback<ReviewResponse> {
             override fun onResponse(
-                call: Call<ReviewMovieResponse>,
-                response: Response<ReviewMovieResponse>
+                call: Call<ReviewResponse>,
+                response: Response<ReviewResponse>
             ) {
                 return callback(response.body()!!.reviews)
             }
 
-            override fun onFailure(call: Call<ReviewMovieResponse>, t: Throwable) {
+            override fun onFailure(call: Call<ReviewResponse>, t: Throwable) {
                 errorMsg.postValue(t.message)
             }
         })

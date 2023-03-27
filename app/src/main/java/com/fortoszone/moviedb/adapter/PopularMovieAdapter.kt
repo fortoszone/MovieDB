@@ -36,12 +36,10 @@ class PopularMovieAdapter(private val movies: List<Movie>) :
             binding.tvMovieTitle.text = movie.title
 
 
-            with(itemView) {
-                binding.imgMovie.setOnClickListener {
-                    val moveActivity = Intent(itemView.context, DetailActivity::class.java)
-                    moveActivity.putExtra(DetailActivity.EXTRA_DETAILS, movie)
-                    itemView.context.startActivity(moveActivity)
-                }
+            binding.imgMovie.setOnClickListener {
+                val moveActivity = Intent(itemView.context, DetailActivity::class.java)
+                moveActivity.putExtra(DetailActivity.EXTRA_DETAILS, movie)
+                itemView.context.startActivity(moveActivity)
             }
         }
     }

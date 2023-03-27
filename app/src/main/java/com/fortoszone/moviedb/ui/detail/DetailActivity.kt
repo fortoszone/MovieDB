@@ -1,5 +1,6 @@
 package com.fortoszone.moviedb.ui.detail
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -18,11 +19,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var dialog: BottomSheetDialog
     private lateinit var viewModel: DetailViewModel
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -45,11 +49,12 @@ class DetailActivity : AppCompatActivity() {
             intent.getParcelableExtra<Movie>(EXTRA_DETAILS) as Movie
         }
 
-//        checkMovieFavorite()
-
         if (movie != null) {
             binding.tvMovieTitle.text = movie.title
-            binding.tvMovieReleaseDate.text = movie.releaseDate
+            val timeFormat =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val date = LocalDate.parse(movie.releaseDate, timeFormat)
+            binding.tvMovieReleaseDate.text = date.year.toString()
             binding.tvMovieDesc.text = movie.overview
             Glide.with(this).load("https://image.tmdb.org/t/p/w500" + movie.backdrop)
                 .into(binding.imgMovie)

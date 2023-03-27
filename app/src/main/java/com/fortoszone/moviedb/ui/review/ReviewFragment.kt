@@ -34,7 +34,7 @@ class ReviewFragment : Fragment() {
         rvMovieReview.setHasFixedSize(true)
 
         reviewViewModel.loadMovieReview(requireActivity().intent) { reviews: List<Review> ->
-            rvMovieReview.adapter = ReviewAdapter(reviews)
+            rvMovieReview.adapter = ReviewAdapter(requireContext(), reviews)
         }
 
         rvMovieReview.layoutManager =

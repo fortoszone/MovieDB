@@ -1,7 +1,7 @@
 package com.fortoszone.moviedb.model.remote.retrofit
 
 import com.fortoszone.moviedb.model.remote.response.MovieResponse
-import com.fortoszone.moviedb.model.remote.response.ReviewMovieResponse
+import com.fortoszone.moviedb.model.remote.response.ReviewResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,6 +17,6 @@ interface MovieInterface {
     fun getNowPlaying(): Call<MovieResponse>
 
     @GET("/3/movie/{id}/reviews?api_key=078e8fe79377bcac312b276a6f7ed8fa")
-    fun getReview(@Path("id") id: String): Call<ReviewMovieResponse>
+    fun getReview(@Path("id") id: String): Call<ReviewResponse>
 
 }

@@ -34,22 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.favorite.FavoriteActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.detail.DetailActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.home.HomeActivity"
-            android:exported="false" />
-
-        <provider
-            android:name=".provider.FavoriteProvider"
-            android:authorities="com.fortoszone.moviedb"
-            android:enabled="true"
-            android:exported="true"
-            android:readPermission="com.fortoszone.moviedb.READ_DATABASE"
-            android:writePermission="com.fortoszone.moviedb.WRITE_DATABASE" />
     </application>
-
 </manifest>

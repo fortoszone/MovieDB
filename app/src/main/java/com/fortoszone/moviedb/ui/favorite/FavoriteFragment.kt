@@ -22,8 +22,7 @@ class FavoriteFragment : Fragment() {
     private lateinit var adapter: FavoriteAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentFavoriteBinding.inflate(layoutInflater)
         adapter = FavoriteAdapter()
@@ -41,7 +40,17 @@ class FavoriteFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             viewModel.getFavoriteMovieList().observe(
                 viewLifecycleOwner
-            ) { movies -> adapter.setData(movies) }
+            ) { movies ->
+                adapter.setData(movies).apply {
+                    if (movies.isNotEmpty()) {
+                        binding.rvFavoriteMovie.visibility = View.VISIBLE
+                        binding.ivEmptyFavorite.visibility = View.INVISIBLE
+                    } else {
+                        binding.rvFavoriteMovie.visibility = View.INVISIBLE
+                        binding.ivEmptyFavorite.visibility = View.VISIBLE
+                    }
+                }
+            }
         }
 
         return binding.root
@@ -52,8 +61,17 @@ class FavoriteFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             viewModel.getFavoriteMovieList().observe(
                 viewLifecycleOwner
-            ) { movies -> adapter.setData(movies) }
+            ) { movies ->
+                adapter.setData(movies).apply {
+                    if (movies.isNotEmpty()) {
+                        binding.rvFavoriteMovie.visibility = View.VISIBLE
+                        binding.ivEmptyFavorite.visibility = View.INVISIBLE
+                    } else {
+                        binding.rvFavoriteMovie.visibility = View.INVISIBLE
+                        binding.ivEmptyFavorite.visibility = View.VISIBLE
+                    }
+                }
+            }
         }
     }
-
 }

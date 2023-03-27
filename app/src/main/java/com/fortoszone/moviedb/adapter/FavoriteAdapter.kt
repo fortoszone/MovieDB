@@ -11,6 +11,8 @@ import com.fortoszone.moviedb.R
 import com.fortoszone.moviedb.databinding.FavoriteRowBinding
 import com.fortoszone.moviedb.model.local.entity.Movie
 import com.fortoszone.moviedb.ui.detail.DetailActivity
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class FavoriteAdapter() :
     RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
@@ -37,18 +39,21 @@ class FavoriteAdapter() :
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + movie.posterPath)
                 .into(binding.imgMovie)
 
-            binding.tvMovieReleaseDate.text = movie.releaseDate
+            val timeFormat =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val date = LocalDate.parse(movie.releaseDate, timeFormat)
+            binding.tvMovieReleaseDate.text = date.year.toString()
+
             binding.tvMovieTitle.text = movie.title
 
-            with(itemView) {
-                binding.movie.setOnClickListener {
-                    val moveActivity = Intent(itemView.context, DetailActivity::class.java)
-                    moveActivity.putExtra(DetailActivity.EXTRA_DETAILS, movie)
-                    itemView.context.startActivity(moveActivity)
-                }
+            binding.movie.setOnClickListener {
+                val moveActivity = Intent(itemView.context, DetailActivity::class.java)
+                moveActivity.putExtra(DetailActivity.EXTRA_DETAILS, movie)
+                itemView.context.startActivity(moveActivity)
             }
         }
     }
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(movie: List<Movie>) {
         movie.isEmpty()
         this.movies = movie
