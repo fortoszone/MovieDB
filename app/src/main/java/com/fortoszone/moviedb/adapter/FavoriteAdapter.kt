@@ -14,7 +14,7 @@ import com.fortoszone.moviedb.ui.detail.DetailActivity
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class FavoriteAdapter() :
+class FavoriteAdapter :
     RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
 
     private var movies = emptyList<Movie>()
@@ -53,6 +53,7 @@ class FavoriteAdapter() :
             }
         }
     }
+
     @SuppressLint("NotifyDataSetChanged")
     fun setData(movie: List<Movie>) {
         movie.isEmpty()

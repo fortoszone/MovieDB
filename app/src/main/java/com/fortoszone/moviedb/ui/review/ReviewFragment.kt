@@ -13,7 +13,6 @@ import com.fortoszone.moviedb.adapter.ReviewAdapter
 import com.fortoszone.moviedb.model.local.entity.Review
 import com.fortoszone.moviedb.utils.ViewModelFactory
 
-
 class ReviewFragment : Fragment() {
     private lateinit var rvMovieReview: RecyclerView
     private lateinit var reviewViewModel: ReviewViewModel

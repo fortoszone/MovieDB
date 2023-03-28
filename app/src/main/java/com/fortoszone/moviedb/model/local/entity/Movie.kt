@@ -26,7 +26,13 @@ data class Movie (
     var overview: String = "",
 
     @SerializedName("backdrop_path")
-    var backdrop: String = ""
+    var backdrop: String = "",
+
+    @SerializedName("vote_average")
+    var voteAverage: Double = 0.0,
+
+    @SerializedName("vote_count")
+    var voteCount: Int = 0
 ) : Parcelable {
-    constructor() : this("", "", "", "", "", "")
+    constructor() : this("", "", "", "", "", "", 0.0, 0)
 }

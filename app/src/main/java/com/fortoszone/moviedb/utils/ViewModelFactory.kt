@@ -19,9 +19,9 @@ class ViewModelFactory constructor(private val repository: MovieRepository) :
             HomeViewModel(this.repository) as T
         } else if ((modelClass.isAssignableFrom(ReviewViewModel::class.java))) {
             ReviewViewModel(this.repository) as T
-        } else if((modelClass.isAssignableFrom(DetailViewModel::class.java))) {
+        } else if ((modelClass.isAssignableFrom(DetailViewModel::class.java))) {
             DetailViewModel(this.repository) as T
-        } else if((modelClass.isAssignableFrom(FavoriteViewModel::class.java))) {
+        } else if ((modelClass.isAssignableFrom(FavoriteViewModel::class.java))) {
             FavoriteViewModel(this.repository) as T
         } else {
             throw IllegalArgumentException("ViewModel Not Found")

@@ -16,13 +16,27 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="72dp"
-        android:text="@string/created_by_owner"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center">
 
+        <ImageView
+            android:layout_width="18sp"
+            android:layout_height="18dp"
+            android:src="@drawable/github_mark_white"
+            android:layout_marginEnd="6dp"
+            android:contentDescription="@string/github_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_name"
+            android:textSize="14sp"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

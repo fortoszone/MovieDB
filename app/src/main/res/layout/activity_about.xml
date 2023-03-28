@@ -20,7 +20,7 @@
         android:layout_below="@id/created_by"
         android:layout_marginHorizontal="100dp"
         android:layout_marginBottom="20dp"
-        android:contentDescription="@string/created_by_owner"
+        android:contentDescription="@string/created_by"
         android:src="@drawable/deva" />
 
     <TextView

@@ -18,7 +18,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -26,6 +25,7 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     private lateinit var dialog: BottomSheetDialog
     private lateinit var viewModel: DetailViewModel
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +58,9 @@ class DetailActivity : AppCompatActivity() {
             binding.tvMovieDesc.text = movie.overview
             Glide.with(this).load("https://image.tmdb.org/t/p/w500" + movie.backdrop)
                 .into(binding.imgMovie)
+
+            binding.tvVoteAverage.text = movie.voteAverage.toString()
+            binding.tvVoteCount.text = "(${movie.voteCount})"
         } else {
             Toast.makeText(this, "Data is not retrieved yet", Toast.LENGTH_SHORT).show()
         }
@@ -107,6 +110,7 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun showBottomSheet() {
         val dialogView = layoutInflater.inflate(R.layout.bottom_sheet, null)
         dialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)

@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/created_at"
-                android:layout_marginEnd="6dp"/>
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/tv_movie_review_date"
