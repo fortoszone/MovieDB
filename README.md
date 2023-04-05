@@ -20,6 +20,4 @@
     <li>Material3</li>
 </ul>
 
-[<img src="https://darkhorsebets.com/wp-content/uploads/2021/08/Android-Badge_Black.png" width="20%">](https://drive.google.com/file/d/1SZb_kZ55ik-dZTEiK9jWZhRCbe6BjYiR/view?usp=share_link)
-
 <p>All credits to TMDB</p>
